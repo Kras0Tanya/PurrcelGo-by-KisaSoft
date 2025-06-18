@@ -49,9 +49,10 @@ func TestAddGetDelete(t *testing.T) {
 	// проверьте, что значения всех полей в полученном объекте совпадают со значениями полей в переменной parcel
 	stored, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, parcel.Client, stored.Client)
-	require.Equal(t, parcel.Status, stored.Status)
-	require.Equal(t, parcel.Address, stored.Address)
+
+	expected := parcel
+	expected.Number = stored.Number
+	require.Equal(t, expected, stored)
 
 	// delete
 	// удалите добавленную посылку, убедитесь в отсутствии ошибки
@@ -172,9 +173,7 @@ func TestGetByClient(t *testing.T) {
 		// убедитесь, что все посылки из storedParcels есть в parcelMap
 		require.True(t, ok, "Unexpected parcel with ID %d", parcel.Number)
 		// убедитесь, что значения полей полученных посылок заполнены верно
-		require.Equal(t, original.Client, parcel.Client)
-		require.Equal(t, original.Status, parcel.Status)
-		require.Equal(t, original.Address, parcel.Address)
-		require.Equal(t, original.CreatedAt, parcel.CreatedAt)
+		original.Number = parcel.Number
+		require.Equal(t, original, parcel)
 	}
 }
